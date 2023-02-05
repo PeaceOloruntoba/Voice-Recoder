@@ -1,25 +1,42 @@
 from tkinter import *
-# import sounddevice as sound
-# from scipy.io.wavfile import write
-# import time
-# import wavio as wv
+from tkinter import messagebox
+import sounddevice as sound
+from scipy.io.wavfile import write
+import time
+import wavio as wv
 
 root=Tk()
 root.geometry("600x700+400+80")
 root.resizable(False,False)
 root.title("Edge||Tech-Voice Recorder")
+img=PhotoImage(file='C:\\Projects\\Voice-Recoder\\index.png')
+root.iconphoto(False,img)
 root.configure(background="#4a4a4a")
 
 def Record():
     freq=44100
-
-#icon
-root.iconbitmap("index")
+    dur=int(duration.get())
+    recording=sound.rec(dur*freq, samplerate=freq,channels=2)
+    #timer
+    try:
+        temp=int(duration.get())
+    except:
+        print("lease enter the right value")
+    while temp>0:
+        root.update()
+        time.sleep(1)
+        temp-=1
+        
+        if(temp == 0):
+            messagebox.showinfo("Time Countdown:","Time's up")
+        Label(text=f"{str(temp)}",font="arial 40",width=4,background="#4a4a4a").place(x=240,y=590)
+    sound.wait()
+    write("recording.wav",freq,recording)
 
 #logo
-# photo=PhotoImage(file="index.png")
-# myimage=Label(image=photo,background="#4a4a4a")
-# myimage.pack(padx=5,pady=5)
+photo=PhotoImage(file="C:\\Projects\\Voice-Recoder\\th.png")
+myimage=Label(image=photo,background="#4a4a4a")
+myimage.pack(padx=5,pady=5)
 
 #name
 Label(text="Voice Recorder",font="arial 30 bold", background="#4a4a4a",fg="white").pack()
